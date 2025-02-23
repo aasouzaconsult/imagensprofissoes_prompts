@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts por Profissão</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        #searchInput {
+            padding: 0.75rem 1rem;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2::before {
+            content: "🎈";
+        }
+
+        .card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prompts por Profissão</h1>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Pesquisar profissão...">
+        </div>
+
+        <div class="grid" id="cardsContainer">
+        </div>
+    </div>
+
+    <script>
+        const professions = [
+            {
+                title: "Auditor Interno",
+                description: "A professional auditor in a modern office, carefully reviewing financial documents and reports on a large desk filled with papers, a calculator, and a laptop. He is wearing formal business attire and glasses. He is holding a balloon with the word 'Auditor Interno' written on it."
+            },
+            {
+                title: "Publicitário",
+                description: "A creative advertising professional in a trendy office, brainstorming marketing ideas on a whiteboard filled with colorful sketches and notes. His desk has a laptop, coffee cup, and digital tablet. He is holding a balloon with the word 'Publicitário' written on it."
+            },
+            {
+                title: "Economista",
+                description: "An economist in a high-rise office, analyzing complex financial data on multiple computer screens displaying graphs and market trends. He is dressed in business casual attire and holding a pen while making notes. He is holding a balloon with the word 'Economista' written on it."
+            },
+            {
+                title: "Indústria (Engenheiro de Produção)",
+                description: "An industrial engineer inside a large manufacturing plant, wearing a safety helmet and a reflective vest. He is inspecting the production line, looking at a tablet with technical drawings and factory data. He is holding a balloon with the word 'Indústria' written on it."
+            },
+            {
+                title: "Varejo",
+                description: "A retail manager inside a modern clothing store, organizing merchandise and overseeing customer service. The store is well-lit with neatly arranged shelves and racks. She is holding a clipboard and checking inventory while holding a balloon with the word 'Varejo' written on it."
+            },
+            {
+                title: "Advogada",
+                description: "A female lawyer in a classic law office, sitting at a wooden desk with legal books, case files, and a laptop. She is wearing a black suit and glasses, holding a pen while reviewing a legal contract. She is holding a balloon with the word 'Advogada' written on it."
+            },
+            {
+                title: "Automação Industrial",
+                description: "An industrial automation engineer in a futuristic factory, monitoring robotic arms assembling products. He is wearing safety goggles and a lab coat, programming an advanced machine on a touchscreen panel. He is holding a balloon with the word 'Automação Industrial' written on it."
+            },
+            {
+                title: "Enfermeira",
+                description: "A dedicated nurse in a busy hospital, wearing a blue medical uniform and a stethoscope around her neck. She is smiling while checking a patient's IV drip in a bright and clean patient room. She is holding a balloon with the word 'Enfermeira' written on it."
+            },
+            {
+                title: "Coordenação de TI em Hospital",
+                description: "A hospital IT coordinator in a modern healthcare facility, monitoring computer systems and cybersecurity infrastructure. He is sitting at a desk with multiple monitors showing medical software dashboards. He is holding a balloon with the word 'Coordenação de TI em Hospital' written on it."
+            },
+            {
+                title: "Administração Hospitalar",
+                description: "A hospital administrator in a spacious medical office, reviewing performance reports and coordinating meetings with doctors. She is wearing formal business attire and speaking on the phone. She is holding a balloon with the word 'Administração Hospitalar' written on it."
+            },
+            {
+                title: "Supervisão Administrativa em Clínica",
+                description: "A clinic administrator in a reception area, overseeing patient check-ins and scheduling appointments on a computer. She is wearing business casual attire and a headset. She is holding a balloon with the word 'Supervisão Administrativa em Clínica' written on it."
+            },
+            {
+                title: "Estudante",
+                description: "A young student in a university library, surrounded by books and taking notes on a laptop. He is wearing a hoodie and headphones, focused on studying for an exam. He is holding a balloon with the word 'Estudante' written on it."
+            },
+            {
+                title: "Segurança Patrimonial/Bombeiro",
+                description: "A security guard in a corporate building, monitoring surveillance cameras on multiple screens. He is wearing a black uniform with a radio on his belt. He is holding a balloon with the word 'Segurança Patrimonial' written on it."
+            },
+            {
+                title: "Atendimento Pré-Hospitalar",
+                description: "A paramedic in an emergency response setting, rushing to help a patient in an ambulance. He is wearing a red and white uniform with a medical bag. He is holding a balloon with the word 'Atendimento Pré-Hospitalar' written on it."
+            },
+            {
+                title: "Anestesiologista",
+                description: "An anesthesiologist in an operating room, carefully monitoring a patient's vital signs on a screen while preparing an anesthesia injection. He is wearing surgical scrubs, gloves, and a mask. He is holding a balloon with the word 'Anestesiologista' written on it."
+            },
+            {
+                title: "Engenheiro Civil",
+                description: "A civil engineer at a construction site, wearing a yellow safety helmet and an orange vest, examining blueprints while overseeing the workers. The background features cranes and unfinished structures. He is holding a balloon with the word 'Engenheiro Civil' written on it."
+            },
+            {
+                title: "Indústria de Rações",
+                description: "A professional in an animal feed production facility, wearing a lab coat and safety gloves, inspecting raw materials and quality control processes. He is holding a balloon with the word 'Indústria de Rações' written on it."
+            },
+            {
+                title: "Contabilidade Hospitalar",
+                description: "A hospital accountant in an office, reviewing financial reports and balancing medical expenses on a calculator and laptop. He is dressed in a professional suit. He is holding a balloon with the word 'Contabilidade Hospitalar' written on it."
+            },
+            {
+                title: "Consultor de IA",
+                description: "An AI consultant in a high-tech workspace, presenting machine learning models on a digital screen to a team of executives. He is wearing smart casual attire and explaining data-driven insights. He is holding a balloon with the word 'Consultor de IA' written on it."
+            },
+            {
+                title: "Analista de Dados",
+                description: "A data analyst in a modern office, examining complex datasets on multiple screens. He is wearing business casual attire and using advanced analytics software to generate insights. He is holding a balloon with the word 'Analista de Dados' written on it."
+            }
+        ];
+
+        function createCard(profession) {
+            return `
+                <div class="card">
+                    <h2>${profession.title}</h2>
+                    <p>${profession.description}</p>
+                </div>
+            `;
+        }
+
+        function renderCards(filteredProfessions = professions) {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = filteredProfessions
+                .map(profession => createCard(profession))
+                .join('');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = professions.filter(profession => 
+                profession.title.toLowerCase().includes(searchTerm) ||
+                profession.description.toLowerCase().includes(searchTerm)
+            );
+            renderCards(filtered);
+        });
+
+        // Initial render
+        renderCards();
+    </script>
+</body>
+</html>
